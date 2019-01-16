@@ -5,7 +5,7 @@
       <div v-else class="display-screen">{{calculation}}</div>
       <div class="buttons">
         <div class="number-buttons">
-          <button class="big-button clear-button">Clear</button>
+          <button v-on:click="clear" class="big-button clear-button">Clear</button>
           <button v-on:click="addNumber(7)" class="button">7</button>
           <button v-on:click="addNumber(8)" class="button">8</button>
           <button v-on:click="addNumber(9)" class="button">9</button>
@@ -62,7 +62,27 @@ export default {
         case "divide":
           this.calculation = Math.round(this.storedNumber / this.calculation);
           this.storedNumber = 0;
+          return;
+        case "add":
+          this.calculation = this.storedNumber + this.calculation;
+          this.storedNumber = 0;
+          return;
+        case "subtract":
+          this.calculation = this.storedNumber - this.calculation;
+          this.storedNumber = 0;
+          return;
+        case "multiply":
+          this.calculation = this.storedNumber * this.calculation;
+          this.storedNumber = 0;
+          return;
       }
+    },
+    clear: function() {
+      (this.calculation = 0),
+        (this.prevCalculation = 0),
+        (this.storedNumber = 0),
+        (this.calculateMethod = ""),
+        (this.prevNumber = false);
     }
   }
 };
