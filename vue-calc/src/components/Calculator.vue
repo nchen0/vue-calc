@@ -1,7 +1,8 @@
 <template>
   <div class="App">
     <div class="container">
-      <div class="display-screen">{{calculation}}</div>
+      <div v-if="storedNumber !== 0 && calculation === 0" class="display-screen">{{storedNumber}}</div>
+      <div v-else class="display-screen">{{calculation}}</div>
       <div class="buttons">
         <div class="number-buttons">
           <button class="big-button clear-button">Clear</button>
@@ -21,7 +22,7 @@
           <button v-on:click="calculate('multiply')" class="button action-button">×</button>
           <button v-on:click="calculate('minus')" class="button action-button">−</button>
           <button v-on:click="calculate('add')" class="button action-button">+</button>
-          <button v-on:click="calculate('equal')" class="button action-button equal-button">=</button>
+          <button v-on:click="clickEqual('equal')" class="button action-button equal-button">=</button>
         </div>
       </div>
     </div>
@@ -30,30 +31,38 @@
 
 <script>
 export default {
-  data() { 
+  data() {
     return {
       calculation: 0,
       prevCalculation: 0,
-      calculate: "",
+      storedNumber: 0,
+      calculateMethod: "",
       prevNumber: false
     };
   },
   methods: {
     addNumber: function(e) {
-      if (this.calculation === 0) {
+      if (
+        (this.calculation === 0 || this.prevCalculation !== 0) &&
+        this.prevNumber === false
+      ) {
         this.calculation = e;
       } else {
         this.calculation = Number(this.calculation.toString() + e.toString());
       }
     },
     calculate: function(e) {
-        if (e === "equal") {
-            if (this.calculate === "divide") {
-                this.
-            }
-        }
-        this.calculate = e;
-
+      this.calculatedMethod = e;
+      this.storedNumber = this.calculation;
+      this.prevNumber = true;
+      this.calculation = 0;
+    },
+    clickEqual: function(e) {
+      switch (this.calculatedMethod) {
+        case "divide":
+          this.calculation = Math.round(this.storedNumber / this.calculation);
+          this.storedNumber = 0;
+      }
     }
   }
 };
